@@ -1,0 +1,12 @@
+{
+  "charts": {
+    "Chart 1": {
+      "x_axis_name": "Temp ",
+      "y_axis_name": "Corl",
+      "text_description": "Laid off 😔 the same thing about my reply was ",
+      "type": "line",
+      "color": "blue",
+      "dataseries": "Sensor_C"
+    }
+  }
+}
