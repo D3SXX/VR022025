@@ -1,15 +1,13 @@
-interface Data {
+export interface Data {
     data: Entry[]
   }
   
-  interface Entry {
+export interface Entry {
     name: string;
     dataseries: Datasery[];
   }
   
-  interface Datasery {
+export interface Datasery {
     value: number;
     date: string;
   }
-
-export default Data;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
   Button,
   TextField,
@@ -15,15 +15,16 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
-import { ClassNames } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { addChart } from "../redux/chartReducer";
-import { Data } from "../interfaces/dataInterface";
+import {Entry } from "../interfaces/dataInterface";
 import { RootState } from "../redux/store";
 import { Chart } from "../interfaces/chartInterface";
+
+
 const AddChartModal = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dataseriesCollection, setDataseriesCollection] = useState([]);
+  const [dataseriesCollection, setDataseriesCollection] = useState<{ label: string; value: string; }[]>([]);
 
   const {
     register,
@@ -34,11 +35,12 @@ const AddChartModal = () => {
 
   const dispatch = useDispatch();
 
-  const data: Data = useSelector((state: RootState) => state.data.data);
+  
 
+  const data: Entry[] = useSelector((state: RootState) => state.data.data);
   React.useEffect(() => {
     setDataseriesCollection(
-      data.map((item: Data.data) => ({
+      data.map((item: Entry) => ({
         label: item.name,
         value: item.name,
       }))
@@ -131,7 +133,7 @@ const AddChartModal = () => {
                   rules={{ required: "Dataseries is required" }}
                   render={({ field }) => (
                     <Select {...field} label="Dataseries">
-                      {dataseriesCollection.map((item: Data) => (
+                      {dataseriesCollection.map((item: { label: string; value: string; }) => (
                         <MenuItem key={item.value} value={item.value}>
                           {item.label}
                         </MenuItem>
@@ -164,7 +166,7 @@ const AddChartModal = () => {
                 margin="dense"
               />
               <DialogActions>
-                <Button color="gray" onClick={() => setDialogOpen(false)}>
+                <Button onClick={() => setDialogOpen(false)}>
                   Cancel
                 </Button>
                 <Button type="submit">Add Chart</Button>

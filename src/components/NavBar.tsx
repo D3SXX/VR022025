@@ -1,26 +1,16 @@
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef} from "react";
 import { TransitionProps } from "@mui/material/transitions";
-import { Button, Dialog, IconButton } from "@mui/material";
+import { Dialog, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Slide from "@mui/material/Slide";
 import CloseIcon from "@mui/icons-material/Close";
 import ChartList from "./ChartList";
-import { useParams } from "react-router";
 import AddChartModal from "./AddChartModal";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -52,9 +42,6 @@ const NavBar = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-  };
 
   const handleChartSelect = () => {
     setIsDialogOpen(false);

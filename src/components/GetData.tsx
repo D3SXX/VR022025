@@ -1,5 +1,5 @@
 import { Box, LinearProgress } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setData } from "../redux/dataReducer";
 
@@ -12,7 +12,6 @@ const GetData = () => {
       const res = await fetch("/dataseries.json");
       const data = await res.json();
       setLoading(false);
-      console.log(data);
       dispatch(setData({ data }));
     };
     fetchData();

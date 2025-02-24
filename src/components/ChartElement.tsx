@@ -1,50 +1,46 @@
-import React, { useEffect, useState } from "react";
-import Chart from "../interfaces/chartInterface";
-import Highcharts from "highcharts";
+import { useEffect, useState } from "react";
+import Highcharts, { AxisLabelsFormatterContextObject } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { SingleInputDateRangeField } from "@mui/x-date-pickers-pro/SingleInputDateRangeField";
 import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { Data } from "../interfaces/dataInterface";
-import { Box, Toolbar } from "@mui/material";
-import { display, Stack } from "@mui/system";
+import { Box } from "@mui/material";
+import { Stack } from "@mui/system";
 import { Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { X } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
 import { DateRange } from "@mui/x-date-pickers-pro/models";
 import NotFound from "./NotFound";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AddChartModal from "./AddChartModal";
 import BottomBar from "./BottomBar";
+
+import { Entry } from "../interfaces/dataInterface";
 
 const ChartElement = () => {
   const [dateRange, setDateRange] = useState<DateRange<Dayjs>>();
 
-  const [seriesData, setSeriesData] = useState<Data[]>();
-  const [columnData, setColumnData] = useState<Data[]>();
+  const [seriesData, setSeriesData] = useState<number[]>();
+  const [columnData, setColumnData] = useState<string[] | undefined>();
 
-  const [filteredSeriesData, setFilteredSeriesData] = useState<Data[]>();
+  const [filteredSeriesData, setFilteredSeriesData] = useState<number[]>();
   const [filteredDateRange, setFilteredDateRange] =
     useState<DateRange<Dayjs>>();
 
   const { chartId } = useParams<{ chartId: string }>();
-  const dispatch = useDispatch();
   const chart = useSelector((state: RootState) =>
     state.charts.find((c) => c.name === chartId)
   );
 
-  const data: Data = useSelector((state: RootState) => state.data.data);
+  const data: Entry[] = useSelector((state: RootState) => state.data.data);
 
   useEffect(() => {
     if (chart) {
       const dataseries = data
-        .filter((item: Data) => item.name === chart?.dataseries)
-        .map((item: Data) => {
+        .filter((item: Entry) => item.name === chart?.dataseries)
+        .map((item: Entry) => {
           return item.dataseries;
         });
 
@@ -77,7 +73,7 @@ const ChartElement = () => {
       text: "",
     },
     xAxis: {
-      categories: filteredDateRange,
+      categories: columnData,
       title: {
         text: chart?.x_axis_name,
         align: "middle",
@@ -87,7 +83,7 @@ const ChartElement = () => {
         offset: 50,
       },
       labels: {
-        formatter: function () {
+        formatter: function (this: AxisLabelsFormatterContextObject): string{
           return Highcharts.dateFormat(
             "%d/%m/%Y",
             new Date(this.value).getTime()
@@ -133,14 +129,15 @@ const ChartElement = () => {
 
     const filteredCategories = columnData?.filter((date) => {
       const currentDate = new Date(date);
-      return currentDate >= startDate && currentDate <= endDate;
+      return startDate && endDate ? currentDate >= startDate && currentDate <= endDate : false;
     });
-
-    const filteredSeries = seriesData?.slice(
-      columnData?.indexOf(filteredCategories?.[0]),
-      columnData?.indexOf(filteredCategories?.[filteredCategories.length - 1]) +
-        1
-    );
+    
+    const startIndex = columnData?.findIndex(date => date === filteredCategories?.[0]);
+    
+    const endValue = filteredCategories ? filteredCategories[filteredCategories.length - 1] : "";
+    const endIndex = columnData ? columnData.indexOf(endValue) + 1 : 0;
+    
+    const filteredSeries = seriesData?.slice(startIndex, endIndex);
 
     setFilteredDateRange([
       dayjs(filteredCategories?.[0]),

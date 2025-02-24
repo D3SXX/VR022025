@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { Chart } from "../interfaces/chartInterface";
 import {
   Box,
-  Button,
   IconButton,
   ListItemText,
   ListItemIcon,
   MenuItem,
   Menu,
-  DialogTitle,
-  DialogContentText,
-  TextField,
-  DialogActions,
-  Dialog,
-  DialogContent,
 } from "@mui/material";
-import { matchPath, useLocation, NavLink, useParams } from "react-router";
+import { matchPath, useLocation, NavLink } from "react-router";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ContentCut } from "@mui/icons-material";
 
 import { deleteChart } from "../redux/chartReducer";
+import { Chart } from "../interfaces/chartInterface";
 
 const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
@@ -32,7 +25,7 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
 
   const location = useLocation();
   const match = matchPath("/:chartId", location.pathname);
-  const chartId = match ? decodeURIComponent(match.params.chartId) : null;
+  const chartId = match ? decodeURIComponent(match.params.chartId ?? "") : null;
 
   const dispatch = useDispatch();
 
@@ -68,9 +61,9 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
   return (
     <div>
       {charts ? (
-        charts.map((chart) => (
+        charts.map((chart: Chart) => (
           <div
-            key={chart.id}
+            key={chart.name}
             className={
               selectedChart === chart.name ? "bg-blue-100 rounded" : ""
             }

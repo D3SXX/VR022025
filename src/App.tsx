@@ -2,13 +2,11 @@
 import SideBar from './components/SideBar'
 import GetData from './components/GetData'
 import { Box } from '@mui/material'
-import { BrowserRouter, Route, Router, Routes } from 'react-router';
-import ChartList from './components/ChartList';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import ChartElement from './components/ChartElement';
 import NotFound from './components/NotFound';
 import DefaultPage from './components/DefaultPage';
 import NavBar from './components/NavBar';
-import BottomBar from './components/BottomBar';
 const drawerWidth = "250px";
 
 function App() {

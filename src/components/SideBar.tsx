@@ -1,8 +1,6 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +8,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import Stack from "@mui/material/Stack";
 import ChartList from "./ChartList";
 import AddChartModal from "./AddChartModal";
-import ChartElement from "./ChartElement";
 
 const drawerWidth = "250px";
 

@@ -1,4 +1,4 @@
-interface Chart{
+export interface Chart{
     name: string;
     type: string;
     color: string;
@@ -7,5 +7,3 @@ interface Chart{
     y_axis_name: string;
     text_description: string;
   }
-
-export default Chart;
