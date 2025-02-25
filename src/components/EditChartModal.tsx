@@ -14,17 +14,15 @@ import {
   Stack,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { addChart } from "../redux/chartReducer";
-import {Entry } from "../interfaces/dataInterface";
+import { addChart, deleteChart } from "../redux/chartReducer";
+import { Entry } from "../interfaces/dataInterface";
 import { RootState } from "../redux/store";
 import { Chart } from "../interfaces/chartInterface";
 import { useNavigate } from "react-router";
 
-
-const AddChartModal = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
+const EditChartModal = ({dialogOpen, setDialogOpen, chart}: {dialogOpen: boolean, setDialogOpen: (open: boolean) => void, chart: Chart}) => {
+  
   const [dataseriesCollection, setDataseriesCollection] = useState<{ label: string; value: string; }[]>([]);
 
   const navigate = useNavigate();
@@ -49,25 +47,17 @@ const AddChartModal = () => {
   }, [data]);
 
   const onSubmit = (data: Chart) => {
+    dispatch(deleteChart(chart.name));
     dispatch(addChart(data));
     navigate("/" + data.name);
     setDialogOpen(false);
   };
 
+  
   return (
-    <React.Fragment>
-      <Button
-        className="w-full"
-        size="large"
-        variant="contained"
-        onClick={() => setDialogOpen(true)}
-      >
-        <AddIcon className="mr-2" />
-        <p className="font-bold"> ADD CHART</p>
-      </Button>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>
-          <p className="font-bold">Add Chart</p>
+          <p className="font-bold">Edit Chart</p>
         </DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,6 +73,7 @@ const AddChartModal = () => {
                 margin="dense"
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ""}
+                defaultValue={chart.name}
               ></TextField>
               <FormControl fullWidth margin="dense" error={!!errors.type}>
                 <InputLabel>
@@ -92,6 +83,7 @@ const AddChartModal = () => {
                   name="type"
                   control={control}
                   rules={{ required: "Type is required" }}
+                  defaultValue={chart.type}
                   render={({ field }) => (
                     <Select {...field} label="Type">
                       <MenuItem value="line">Line</MenuItem>
@@ -111,6 +103,7 @@ const AddChartModal = () => {
                   name="color"
                   control={control}
                   rules={{ required: "Color is required" }}
+                  defaultValue={chart.color}
                   render={({ field }) => (
                     <Select {...field} label="Color">
                       <MenuItem value="black">Black</MenuItem>
@@ -133,6 +126,7 @@ const AddChartModal = () => {
                   name="dataseries"
                   control={control}
                   rules={{ required: "Dataseries is required" }}
+                  defaultValue={chart.dataseries}
                   render={({ field }) => (
                     <Select {...field} label="Dataseries">
                       {dataseriesCollection.map((item: { label: string; value: string; }) => (
@@ -153,12 +147,14 @@ const AddChartModal = () => {
                   label="X-axis Name"
                   fullWidth
                   margin="dense"
+                  defaultValue={chart.x_axis_name}
                 />
                 <TextField
                   {...register("y_axis_name")}
                   label="Y-axis Name"
                   fullWidth
                   margin="dense"
+                  defaultValue={chart.y_axis_name}
                 />
               </Stack>
               <TextField
@@ -166,19 +162,19 @@ const AddChartModal = () => {
                 label="Text Description"
                 fullWidth
                 margin="dense"
+                defaultValue={chart.text_description}
               />
               <DialogActions>
                 <Button onClick={() => setDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">Add Chart</Button>
+                <Button type="submit">Edit Chart</Button>
               </DialogActions>
             </Stack>
           </form>
         </DialogContent>
       </Dialog>
-    </React.Fragment>
-  );
-};
+  )
+}
 
-export default AddChartModal;
+export default EditChartModal

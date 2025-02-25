@@ -77,8 +77,11 @@ const ChartElement = () => {
       title: {
         text: chart?.x_axis_name,
         align: "middle",
+        type: "datetime",
         style: {
-          fontSize: "14px",
+          fontSize: "16px",
+          fontWeight: "bold",
+          color: "#212121",
         },
         offset: 50,
       },
@@ -94,13 +97,20 @@ const ChartElement = () => {
       gridLineWidth: 1,
       startOnTick: true,
       endOnTick: true,
+      style: {
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: "#212121",
+      },
     },
     yAxis: {
       title: {
         text: chart?.y_axis_name,
         align: "middle",
         style: {
-          fontSize: "14px",
+          fontSize: "16px",
+          fontWeight: "bold",
+          color: "#212121",
         },
         offset: 70,
       },
@@ -146,7 +156,7 @@ const ChartElement = () => {
     setFilteredSeriesData(filteredSeries);
   };
 
-  const drawerWidth = 283;
+  const drawerWidth = 282;
 
   return (
     <Box

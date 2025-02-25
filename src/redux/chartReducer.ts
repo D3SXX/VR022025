@@ -16,7 +16,7 @@ const initialState: Chart[] = [];
 const chartSlice = createSlice({
   name: 'charts',
   initialState,
-  reducers: {
+  reducers: { 
     addChart: (state, action: PayloadAction<Chart>) => {
       state.push(action.payload);
     },

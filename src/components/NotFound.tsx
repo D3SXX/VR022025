@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import { NavLink } from "react-router";
 import BottomBar from "./BottomBar";
 
-const drawerWidth = 283;
+const drawerWidth = 282;
 
 const NotFound = () => {
   return (

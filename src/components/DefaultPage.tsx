@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import AddChartModal from "./AddChartModal";
 const DefaultPage = () => {
-  const drawerWidth = 283;
+  const drawerWidth = 282;
 
   return (
     <Box

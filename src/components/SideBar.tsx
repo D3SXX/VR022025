@@ -8,10 +8,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import Stack from "@mui/material/Stack";
 import ChartList from "./ChartList";
 import AddChartModal from "./AddChartModal";
+import { useState } from "react";
 
 const drawerWidth = "250px";
 
 const SideBar = () => {
+  
+  const [chartFilter, setChartFilter] = useState<string>("");
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -46,11 +50,12 @@ const SideBar = () => {
               sx={{ flex: 1 }}
               placeholder="Search..."
               inputProps={{ "aria-label": "search..." }}
+              onChange={(e) => setChartFilter(e.target.value)}
             />
           </Paper>
 
           <AddChartModal />
-          <ChartList />
+          <ChartList chartFilter={chartFilter} />
         </Stack>
       </Drawer>
     </Box>

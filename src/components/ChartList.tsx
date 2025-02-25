@@ -17,11 +17,13 @@ import { ContentCut } from "@mui/icons-material";
 
 import { deleteChart } from "../redux/chartReducer";
 import { Chart } from "../interfaces/chartInterface";
+import EditChartModal from "./EditChartModal";
 
-const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
+const ChartList = ({ onChartSelect, chartFilter }: { onChartSelect?: () => void, chartFilter?: string }) => {
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<{ [key: string]: HTMLElement | null }>({});
   const open = Boolean(anchorEl);
+  const [dialogOpen, setDialogOpen] = useState<Record<string, boolean>>({});
 
   const location = useLocation();
   const match = matchPath("/:chartId", location.pathname);
@@ -41,27 +43,42 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
     setSelectedChart(name);
     onChartSelect?.();
   };
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, name: string) => {
+    setAnchorEl(prevState => ({
+      ...prevState,
+      [name]: event.currentTarget,
+    }));
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleMenuClose = (name: string) => {
+    setAnchorEl(prevState => ({
+      ...prevState,
+      [name]: null,
+    }));
   };
 
   const handleEdit = (name: string) => {
-    console.log(name);
+    setDialogOpen(prevState => ({
+      ...prevState,
+      [name]: true,
+    }));
+    handleMenuClose(name);
   };
 
   const handleDelete = (name: string) => {
     dispatch(deleteChart(name));
-    handleMenuClose();
+    handleMenuClose(name);
   };
+
+  const filteredCharts = charts.filter(chart =>
+    chart.name.toLowerCase().includes(chartFilter?.toLowerCase() ?? "")
+  );
+
 
   return (
     <div>
-      {charts ? (
-        charts.map((chart: Chart) => (
+      {filteredCharts ? (
+        filteredCharts.map((chart: Chart) => (
           <div
             key={chart.name}
             className={
@@ -85,7 +102,7 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
                 {chart.name}
               </NavLink>
               <IconButton
-                onClick={handleMenuOpen}
+                onClick={(event) => handleMenuOpen(event, chart.name)}
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
@@ -97,7 +114,10 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
               >
                 <MoreVertIcon />
               </IconButton>
-              <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
+              <Menu 
+              anchorEl={anchorEl[chart.name]} 
+              open={Boolean(anchorEl[chart.name])} 
+              onClose={() => handleMenuClose(chart.name)}>
                 <MenuItem onClick={() => handleEdit(chart.name)}>
                   <ListItemIcon>
                     <ContentCut fontSize="small" />
@@ -112,6 +132,7 @@ const ChartList = ({ onChartSelect }: { onChartSelect?: () => void }) => {
                 </MenuItem>
               </Menu>
             </Box>
+            <EditChartModal dialogOpen={dialogOpen[chart.name]} setDialogOpen={(open: boolean) => setDialogOpen({...dialogOpen, [chart.name]: open})} chart={chart} />
           </div>
         ))
       ) : (
