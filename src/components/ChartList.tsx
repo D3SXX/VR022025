@@ -13,7 +13,7 @@ import { matchPath, useLocation, NavLink } from "react-router";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { ContentCut } from "@mui/icons-material";
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 import { deleteChart } from "../redux/chartReducer";
 import { Chart } from "../interfaces/chartInterface";
@@ -120,7 +120,7 @@ const ChartList = ({ onChartSelect, chartFilter }: { onChartSelect?: () => void,
               onClose={() => handleMenuClose(chart.name)}>
                 <MenuItem onClick={() => handleEdit(chart.name)}>
                   <ListItemIcon>
-                    <ContentCut fontSize="small" />
+                    <ModeEditOutlineIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>Edit</ListItemText>
                 </MenuItem>

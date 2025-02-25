@@ -22,6 +22,7 @@ import { RootState } from "../redux/store";
 import { Chart } from "../interfaces/chartInterface";
 import { useNavigate } from "react-router";
 
+const chartTypes = ["Line", "Spline", "Column", "Area", "AreaSpline", "Pie", "AreaRange", "AreaSplineRange", "BoxPlot", "Bubble", "ColumnRange", "errorBar", "funnel", "gauge"];
 
 const AddChartModal = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -39,6 +40,8 @@ const AddChartModal = () => {
   const dispatch = useDispatch();
 
   const data: Entry[] = useSelector((state: RootState) => state.data.data);
+  const charts: Chart[] = useSelector((state: RootState) => state.charts);
+
   React.useEffect(() => {
     setDataseriesCollection(
       data.map((item: Entry) => ({
@@ -52,6 +55,11 @@ const AddChartModal = () => {
     dispatch(addChart(data));
     navigate("/" + data.name);
     setDialogOpen(false);
+  };
+
+  const isNameTaken = (name: string) => {
+    const index = charts.findIndex((entry) => entry.name === name);
+    return index !== -1 ? "Name is taken" : true;
   };
 
   return (
@@ -73,7 +81,7 @@ const AddChartModal = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack direction="column" className="mt-2" spacing={3}>
               <TextField
-                {...register("name", { required: "Name is required" })}
+                {...register("name", { required: "Name is required", validate: isNameTaken })}
                 label={
                   <p>
                     Name<span style={{ color: "red" }}> *</span>
@@ -94,8 +102,11 @@ const AddChartModal = () => {
                   rules={{ required: "Type is required" }}
                   render={({ field }) => (
                     <Select {...field} label="Type">
-                      <MenuItem value="line">Line</MenuItem>
-                      <MenuItem value="bar">Bar</MenuItem>
+                      {chartTypes.map((type: string) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 />

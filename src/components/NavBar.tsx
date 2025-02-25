@@ -26,12 +26,10 @@ const NavBar = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [chartFilter, setChartFilter] = useState<string>("");
+  
   const toggleSearch = () => {
     setIsSearchVisible(true);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
   };
 
   const handleBlur = () => {
@@ -47,6 +45,13 @@ const NavBar = () => {
     setIsDialogOpen(false);
   };
 
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setIsDialogOpen(true);
+    }
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -56,8 +61,11 @@ const NavBar = () => {
           zIndex: (theme) => theme.zIndex.drawer + 1,
           backgroundColor: "white",
           height: "64px",
+          borderBottom: "1px solid #e0e0e0",
         }}
+        elevation={0}
       >
+        
         <Toolbar
           sx={{
             display: "flex",
@@ -96,6 +104,8 @@ const NavBar = () => {
                   placeholder="Search..."
                   autoFocus
                   inputProps={{ "aria-label": "search..." }}
+                  onChange={(e) => setChartFilter(e.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </Paper>
             ) : (
@@ -114,7 +124,7 @@ const NavBar = () => {
         open={isDialogOpen}
         TransitionComponent={Transition}
         sx={{
-          top: "64px",
+          top: "65px",
           boxShadow: "none",
           display: "flex",
           flexDirection: "column",
@@ -122,10 +132,13 @@ const NavBar = () => {
         BackdropProps={{
           style: { backgroundColor: "transparent", pointerEvents: "none" },
         }}
+        PaperProps={{
+          elevation: 0,
+        }}
       >
         <div className="m-4" style={{ flex: 1, overflow: "auto" }}>
           <div>
-            <ChartList onChartSelect={handleChartSelect} />
+            <ChartList onChartSelect={handleChartSelect} chartFilter={chartFilter} />
           </div>
         </div>
         <div style={{ padding: "16px" }}>

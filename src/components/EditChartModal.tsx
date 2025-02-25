@@ -21,6 +21,9 @@ import { RootState } from "../redux/store";
 import { Chart } from "../interfaces/chartInterface";
 import { useNavigate } from "react-router";
 
+const chartTypes = ["Line", "Spline", "Column", "Area", "AreaSpline", "Pie", "AreaRange", "AreaSplineRange", "BoxPlot", "Bubble", "ColumnRange", "errorBar", "funnel", "gauge"];
+
+
 const EditChartModal = ({dialogOpen, setDialogOpen, chart}: {dialogOpen: boolean, setDialogOpen: (open: boolean) => void, chart: Chart}) => {
   
   const [dataseriesCollection, setDataseriesCollection] = useState<{ label: string; value: string; }[]>([]);
@@ -86,8 +89,11 @@ const EditChartModal = ({dialogOpen, setDialogOpen, chart}: {dialogOpen: boolean
                   defaultValue={chart.type}
                   render={({ field }) => (
                     <Select {...field} label="Type">
-                      <MenuItem value="line">Line</MenuItem>
-                      <MenuItem value="bar">Bar</MenuItem>
+                      {chartTypes.map((type: string) => (
+                        <MenuItem key={type} value={type}>
+                          {type}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 />

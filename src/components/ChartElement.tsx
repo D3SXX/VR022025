@@ -83,7 +83,7 @@ const ChartElement = () => {
           fontWeight: "bold",
           color: "#212121",
         },
-        offset: 50,
+        offset: 70,
       },
       labels: {
         formatter: function (this: AxisLabelsFormatterContextObject): string{
@@ -105,14 +105,14 @@ const ChartElement = () => {
     },
     yAxis: {
       title: {
-        text: chart?.y_axis_name,
+        text: chart?.y_axis_name || "°C (Celsius)",
         align: "middle",
         style: {
           fontSize: "16px",
           fontWeight: "bold",
           color: "#212121",
         },
-        offset: 70,
+        offset: 60,
       },
       gridLineWidth: 0,
       lineWidth: 1,
@@ -123,7 +123,7 @@ const ChartElement = () => {
       {
         name: chart?.name,
         data: filteredSeriesData,
-        type: "line",
+        type: chart?.type.toLowerCase(),
         color: chart?.color,
         showInLegend: false,
         marker: {

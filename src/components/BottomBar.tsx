@@ -17,7 +17,9 @@ const BottomBar = ({ addChart }: { addChart: boolean }) => {
           bottom: 0,
           backgroundColor: "white",
           display: { xs: "flex", md: "none" },
+          borderTop: "1px solid #e0e0e0",
         }}
+        elevation={0}
       >
         <Toolbar>
           {addChart && <AddChartModal />}
